@@ -1,10 +1,10 @@
 # weather-api-ring
 
-FIXME: description
+API to fetch temperature for a city
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/xbrln/weather-api-ring
 
 ## Usage
 
@@ -15,18 +15,6 @@ FIXME: explanation
 ## Options
 
 FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
