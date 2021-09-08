@@ -42,11 +42,12 @@
             :middleware [muuntaja/format-middleware]}})))
 
 (defn start
-  []
-  (jetty/run-jetty #'app {:port 3000
+  [port]
+  (jetty/run-jetty #'app {:port port
                           :join? false}))
 
 (defn -main
   [& args]
   (db/migrate)
-  (start))
+  (let [port (Integer. (or (System/getenv "PORT") "3000"))]
+    (start port)))
