@@ -1,8 +1,8 @@
 (ns weather-api-ring.db
   (:require [clojure.java.jdbc :as sql]
-            [environ.core :as env]))
+            [environ.core :refer [env]]))
 
-(def db (env/env :database-url))
+(def db (env :database-url))
 
 (defn migrated?
   []

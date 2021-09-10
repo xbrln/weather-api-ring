@@ -6,15 +6,13 @@
             [clj-http.client :as client]
             [clojure.data.json :as json]
             [weather-api-ring.db :as db]
-            [environ.core :as env])
+            [environ.core :refer [env]])
   (:gen-class))
-
-; deploy to heroku
 
 (defn temperature
   [city]
   (def w (client/get
-          (str (env/env :owm-api-url) "?q=" city "&units=metric&appid=" (env/env :owm-api-app-id))))
+          (str (env :owm-api-url) "?q=" city "&units=metric&appid=" (env :owm-api-app-id))))
   (get-in (json/read-str (:body w)) ["main" "temp"]))
 
 (defn weather
@@ -49,5 +47,5 @@
 (defn -main
   [& args]
   (db/migrate)
-  (let [port (Integer. (env/env :port))]
+  (let [port (Integer. (env :port))]
     (start port)))
