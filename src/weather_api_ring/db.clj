@@ -2,12 +2,7 @@
   (:require [clojure.java.jdbc :as sql]
             [environ.core :as env]))
 
-(def db {:dbtype (env/env :dbtype)
-         :dbname (env/env :dbname)
-         :host (env/env :host)
-         :port (env/env :port)
-         :user (env/env :user)
-         :password (env/env :password)})
+(def db (env/env :database-url))
 
 (defn migrated?
   []

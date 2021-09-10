@@ -49,5 +49,5 @@
 (defn -main
   [& args]
   (db/migrate)
-  (let [port (Integer. (or (System/getenv "PORT") "3000"))]
+  (let [port (Integer. (env/env :port))]
     (start port)))
