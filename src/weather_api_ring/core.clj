@@ -1,8 +1,9 @@
 (ns weather-api-ring.core
   (:require [ring.adapter.jetty :as jetty]
-            [reitit.ring :as ring]
-            [muuntaja.core :as m]
-            [reitit.ring.middleware.muuntaja :as muuntaja]
+            [compojure.core :as comp]
+            [compojure.route :as route]
+            [ring.middleware.json :refer [wrap-json-response]]
+            [ring.util.response :refer [response]]
             [clj-http.client :as client]
             [clojure.data.json :as json]
             [weather-api-ring.db :as db]
@@ -11,41 +12,48 @@
 
 (defn temperature
   [city]
-  (def w (client/get
-          (str (env :owm-api-url) "?q=" city "&units=metric&appid=" (env :owm-api-app-id))))
-  (get-in (json/read-str (:body w)) ["main" "temp"]))
+  (let [w (client/get
+           (str (env :owm-api-url)
+                "?q=" city "&units=metric&appid="
+                (env :owm-api-app-id)))]
+    (get-in (json/read-str (:body w)) ["main" "temp"])))
 
 (defn weather
-  [request]
-  (let [c (get-in request [:path-params :city])
-        t (temperature c)]
+  [c]
+  (let [t (temperature c)]
     (db/save c t)
-    {:status 200
-     :body {:temperature t
-            :city c
-            :datetime (new java.util.Date)}}))
+    (response {:temperature t
+               :city c
+               :datetime (new java.util.Date)})))
 
 (defn all-weather
-  [_]
-  {:status 200
-   :body (db/all)})
+  []
+  (response {:status 200
+             :body (db/all)}))
 
-(def app
-  (ring/ring-handler
-   (ring/router
-    ["/"
-     ["weather/:city" weather]
-     ["weather" all-weather]]
-    {:data {:muuntaja m/instance
-            :middleware [muuntaja/format-middleware]}})))
+(comp/defroutes
+ routes
+ (comp/GET "/" [] "weather api wrapper")
+ (comp/GET "/weather/:city" [city] (weather city))
+ (comp/GET "/weather" [] (all-weather))
+ (route/not-found "Not found"))
 
-(defn start
+(def app (wrap-json-response #'routes))
+
+(defonce server (atom nil))
+
+(defn start-server
   [port]
-  (jetty/run-jetty #'app {:port port
-                          :join? false}))
+  (reset! server (jetty/run-jetty #'app {:port port :join? false})))
+
+(defn stop-server
+  []
+  (when-some [s @server]
+    (.stop s)
+    (reset! server nil)))
 
 (defn -main
   [& args]
   (db/migrate)
   (let [port (Integer. (env :port))]
-    (start port)))
+    (start-server port)))
