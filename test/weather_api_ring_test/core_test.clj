@@ -2,6 +2,6 @@
   (:require [clojure.test :refer :all]
             [weather-api-ring.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest start-server-test
+  (testing "if server can be started"
+    (is (= 0 (start-server 3000)))))
