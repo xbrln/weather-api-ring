@@ -35,3 +35,6 @@
   (db/migrate)
   (let [port (Integer. (env :port))]
     (start-server port)))
+
+(comment
+  (start-server 3000))

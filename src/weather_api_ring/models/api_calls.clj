@@ -2,7 +2,15 @@
   (:require [clojure.java.jdbc :as sql]
             [environ.core :refer [env]]))
 
+; postgress in one line
 (def db (env :database-url))
+
+; postgress
+; (def db {:dbtype "postgresql"
+;          :dbname "weather_api_ring"
+;          :host "localhost"
+;          :user "weather_api_ring"
+;          :password (env :db-password)})
 
 (defn migrated?
   "Predicate to check if table is migrated"
@@ -16,13 +24,13 @@
   (when (not (migrated?))
     (print "Creating database structure...") (flush)
     (sql/db-do-commands db
-      (sql/create-table-ddl
-       :api_calls
-       [[:id :serial "PRIMARY KEY"]
-        [:city :varchar "NOT NULL"]
-        [:temperature :varchar "NOT NULL"]
-        [:created_at :timestamp
-         "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]]))
+                        (sql/create-table-ddl
+                         :api_calls
+                         [[:id :serial "PRIMARY KEY"]
+                          [:city :varchar "NOT NULL"]
+                          [:temperature :varchar "NOT NULL"]
+                          [:created_at :timestamp
+                           "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]]))
     (println " done")))
 
 (defn save
@@ -34,3 +42,6 @@
   "Get all records"
   []
   (sql/query db ["SELECT * FROM api_calls ORDER BY id DESC"]))
+
+(comment
+  (migrate))

@@ -10,7 +10,7 @@
                  [compojure "1.6.2"]
                  [clj-http "3.12.3"]
                  [org.clojure/data.json "2.4.0"]
-                 [org.clojure/java.jdbc "0.6.1"]
+                 [org.clojure/java.jdbc "0.7.12"]
                  [org.postgresql/postgresql "42.2.23"]
                  [environ "1.2.0"]]
   :main ^:skip-aot weather-api-ring.core
