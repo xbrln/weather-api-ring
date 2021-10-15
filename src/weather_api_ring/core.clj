@@ -1,12 +1,13 @@
 (ns weather-api-ring.core
-  (:require [ring.adapter.jetty :as jetty]
-            [compojure.core :as comp]
-            [compojure.route :as route]
-            [ring.middleware.json :refer [wrap-json-response]]
-            [ring.util.response :refer [response]]
-            [environ.core :refer [env]]
-            [weather-api-ring.controllers.weather :as w]
-            [weather-api-ring.models.api-calls :as db])
+  (:require
+   [compojure.core :as comp]
+   [compojure.route :as route]
+   [environ.core :refer [env]]
+   [ring.adapter.jetty :as jetty]
+   [ring.middleware.json :refer [wrap-json-response]]
+   [ring.util.response :refer [response]]
+   [weather-api-ring.controllers.weather :as w]
+   [weather-api-ring.models.api-calls :as db])
   (:gen-class))
 
 (comp/defroutes
@@ -16,7 +17,8 @@
  (comp/GET "/weather" [] (response (w/all-weather)))
  (route/not-found (response "Not found")))
 
-(def app (wrap-json-response #'routes))
+(def app (-> #'routes
+             wrap-json-response))
 
 (defonce server (atom nil))
 
