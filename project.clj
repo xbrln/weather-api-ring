@@ -8,10 +8,10 @@
  :dependencies [[clj-http "3.12.3"]
                 [compojure "1.6.2"]
                 [environ "1.2.0"]
-                [org.clojure/clojure "1.10.1"]
+                [org.clojure/clojure "1.10.3"]
                 [org.clojure/data.json "2.4.0"]
                 [org.clojure/java.jdbc "0.7.12"]
-                [org.postgresql/postgresql "42.2.23"]
+                [org.postgresql/postgresql "42.3.0"]
                 [ring "1.9.4"]
                 [ring/ring-json "0.5.1"]]
  :main ^:skip-aot weather-api-ring.core
@@ -25,7 +25,7 @@
             :profiles/dev  {}
             :profiles/prod {}
             :project/dev {:resource-paths ["resource-dev"]
-                          :dependencies [[expectations "1.4.41"]]}
+                          :dependencies [[expectations "2.1.10"]]}
             :project/prod {:resource-paths ["resource-prod"]}})
 
 ; :profiles {:dev [:project/dev :profiles/dev]
