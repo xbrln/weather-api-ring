@@ -25,6 +25,8 @@
 
 (defonce server (atom nil))
 
+(env :def)
+
 (defn start-server
   [port]
   (reset! server (jetty/run-jetty #'app {:port port :join? false})))

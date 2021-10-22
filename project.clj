@@ -19,4 +19,21 @@
  :plugins [[lein-environ "1.2.0"]]
  :ring {:handler weather-api-ring.core/app
         :init weather-api-ring.db/migrate}
- :profiles {:uberjar {:aot :all}})
+ :profiles {:uberjar {:aot :all}
+            :dev [:project/dev :profiles/dev]
+            :prod [:project/prod :profiles/prod]
+            :profiles/dev  {}
+            :profiles/prod {}
+            :project/dev {:resource-paths ["resource-dev"]
+                          :dependencies [[expectations "1.4.41"]]}
+            :project/prod {:resource-paths ["resource-prod"]}})
+
+; :profiles {:dev [:project/dev :profiles/dev]
+;            :test [:project/test :profiles/test]
+;            ;; only edit :profiles/* in profiles.clj
+;            :profiles/dev  {}
+;            :profiles/test {}
+;            :project/dev {:source-paths ["src" "tool-src"]
+;                          :dependencies [[midje "1.6.3"]]
+;                          :plugins [[lein-auto "0.1.3"]]}
+;            :project/test {}}
