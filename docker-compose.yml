@@ -2,7 +2,7 @@ version: '3.7'
 services:
   db:
     container_name: weather_api_ring_db
-    image: postgres:alpine
+    image: postgres:14-alpine
     ports:
       - 5432:5432
     environment:
